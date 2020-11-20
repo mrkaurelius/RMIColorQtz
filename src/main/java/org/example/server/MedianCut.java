@@ -73,7 +73,7 @@ public class MedianCut {
         } catch (Exception e){
             e.printStackTrace();
         }
-        System.out.println(ret);
+        // System.out.println(ret);
         return ret;
         // return readImage("./tmp/" + imgFileName);
     }
@@ -165,12 +165,12 @@ public class MedianCut {
     }
 
     public static BufferedImage readImage(String filePath) {
-        System.out.println(filePath);
+        // System.out.println(filePath);
         BufferedImage image = null;
         try {
             image = ImageIO.read(new File(filePath));
         } catch (IOException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         return image;
     }

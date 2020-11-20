@@ -2,14 +2,7 @@ package org.example.server;
 
 import org.example.shared.QuantizationServer;
 
-import javax.imageio.ImageIO;
-import javax.print.attribute.standard.Media;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileWriter;
-import java.net.URL;
 import java.rmi.AlreadyBoundException;
-import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -25,8 +18,6 @@ public class MCutServer implements QuantizationServer {
     // Run server
     public static void main(String[] args) throws RemoteException, AlreadyBoundException {
         // create and put server to registry
-        System.setProperty("java.security.policy","file:./security.policy");
-
         QuantizationServer mCutServer = new MCutServer();
         Registry registry =  LocateRegistry.createRegistry(1099);
         registry.bind("MedianCutServer",mCutServer);
