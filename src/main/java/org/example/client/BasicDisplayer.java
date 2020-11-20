@@ -1,4 +1,4 @@
-package org.example;
+package org.example.client;
 
 import java.awt.*;
 
@@ -9,6 +9,12 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.util.ArrayList;
+
+/**
+ * For testing purposes
+ *
+ */
+
 
 public class BasicDisplayer {
 
@@ -25,8 +31,9 @@ public class BasicDisplayer {
 
     public void addColor(int b, int g, int r, int ind){
         Color c = new Color(r,g,b);
-        JLabel label = new JLabel(String.valueOf(ind + 1));
+        JLabel label = new JLabel();
 
+        // JLabel label = new JLabel(String.valueOf(ind + 1));
 //        JLabel label = new JLabel(String.valueOf(r) + ", "
 //                +  String.valueOf(g) + ", "
 //                +  String.valueOf(b));
@@ -34,7 +41,7 @@ public class BasicDisplayer {
         label.setForeground(Color.white);
         label.setOpaque(true);
         label.setBackground(c);
-        label.setPreferredSize(new Dimension(30,30));
+        label.setPreferredSize(new Dimension(10,10));
         this.frame.add(label);
     }
 

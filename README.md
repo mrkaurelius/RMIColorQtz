@@ -1,8 +1,11 @@
 # RMIColorQtz
 
-
-# dependencies
+### Dependencies
+- OpenCV Java JNI
 ```bash
-# opencv java (debian buster)
 sudo apt install libopencv3.2-java 
+```
+- Maven
+```bash
+sudo apt install maven
 ```
