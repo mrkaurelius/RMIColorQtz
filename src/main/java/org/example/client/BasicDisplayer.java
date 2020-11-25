@@ -43,6 +43,7 @@ public class BasicDisplayer {
         label.setBackground(c);
         label.setPreferredSize(new Dimension(10,10));
         this.frame.add(label);
+        this.frame.setVisible(true);
     }
 
     public void addImage(String filePath) {

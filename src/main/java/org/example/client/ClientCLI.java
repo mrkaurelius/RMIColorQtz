@@ -13,9 +13,11 @@ import java.rmi.registry.Registry;
 public class ClientCLI {
 
     private QuantizationServer mcServer;
+    private QuantizationServer oServer; // TODO
 
     public static void main(String[] args) throws Exception {
         ClientCLI cli = new ClientCLI();
+        // TODO implement cli
     }
 
     public ClientCLI() throws RemoteException, NotBoundException, FileNotFoundException {
@@ -40,7 +42,7 @@ public class ClientCLI {
 
         BufferedImage outputBufImg = byteArrtoBufferedImage(output);
         BasicDisplayer disp = new BasicDisplayer();
-        disp.addImage(outputBufImg);
+        // disp.addImage(outputBufImg);
     }
 
     public byte[] medianCutQtz(byte[] imgBytes, String fileName, int quantizationLevel) throws RemoteException {
@@ -48,7 +50,7 @@ public class ClientCLI {
     }
 
 
-    private BufferedImage byteArrtoBufferedImage(byte[] byteArrInp){
+    public static BufferedImage byteArrtoBufferedImage(byte[] byteArrInp){
         BufferedImage ret = null;
         try {
             ByteArrayInputStream bais = new ByteArrayInputStream(byteArrInp);

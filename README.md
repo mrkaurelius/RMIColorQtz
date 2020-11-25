@@ -16,4 +16,4 @@ sudo apt install maven
 - [Introduction to Java RMI](http://www.javacoffeebreak.com/articles/javarmi/javarmi.html)
 - [Median Cut Wiki](https://en.wikipedia.org/wiki/Median_cut)
 - [An Overview of Color Quantization Techniques](http://web.cs.wpi.edu/~matt/courses/cs563/talks/color_quant/CQindex.html)
-- [Octree Color Quantization](Octree Color Quantization )
+- [Octree Color Quantization](https://www.cubic.org/docs/octree.htm)

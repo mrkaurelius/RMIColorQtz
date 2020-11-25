@@ -2,7 +2,6 @@ package org.example.server;
 
 import nu.pattern.OpenCV;
 import org.apache.commons.io.FileUtils;
-import org.example.client.BasicDisplayer;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.*;
 
@@ -20,27 +19,6 @@ public class MedianCut {
     private ArrayList<Px> PxList = new ArrayList<Px>();
     private Mat output;
     private ArrayList<double[]> avrP8List = new ArrayList<double[]>();
-
-    public MedianCut(String imgFilePath, String outputFilePath, int depth) {
-        // load opencv
-        OpenCV.loadShared();
-
-        this.img = Imgcodecs.imread(imgFilePath);
-        this.output = new Mat(img.rows(), img.cols(), img.type());
-
-        findSortChannel();
-
-        this.PxList.sort((Px p1, Px p2) -> {
-            if (p1.data[sortChannel] < p2.data[sortChannel])
-                return 1;
-            if (p1.data[sortChannel] > p2.data[sortChannel])
-                return -1;
-            return 0;
-        });
-
-        divideBuckets(PxList, depth + 1, 1);
-        Imgcodecs.imwrite(outputFilePath, output);
-    }
 
     public MedianCut() {
         // load opencv
@@ -69,8 +47,8 @@ public class MedianCut {
 
         byte[] ret = null;
         try {
-            ret =FileUtils.readFileToByteArray(new File("./tmp/" + imgFileName));
-        } catch (Exception e){
+            ret = FileUtils.readFileToByteArray(new File("./tmp/" + imgFileName));
+        } catch (Exception e) {
             e.printStackTrace();
         }
         // System.out.println(ret);
@@ -133,18 +111,15 @@ public class MedianCut {
                 Px tmp = new Px(data, i, j);
                 PxList.add(tmp);
 
-                for (int k = 0; k < ch; k++) //Runs for the available number of channels
-                {
-                    double B = data[0];
-                    double G = data[1];
-                    double R = data[2];
-                    if (B > Bmax) Bmax = B;
-                    if (G > Gmax) Gmax = G;
-                    if (R > Rmax) Rmax = R;
-                    if (B < Bmin) Bmin = B;
-                    if (G < Gmin) Gmin = G;
-                    if (R < Rmin) Rmin = R;
-                }
+                double B = data[0];
+                double G = data[1];
+                double R = data[2];
+                if (B > Bmax) Bmax = B;
+                if (G > Gmax) Gmax = G;
+                if (R > Rmax) Rmax = R;
+                if (B < Bmin) Bmin = B;
+                if (G < Gmin) Gmin = G;
+                if (R < Rmin) Rmin = R;
             }
         }
         double Bdiff = Bmax - Bmin;
@@ -189,6 +164,10 @@ class Px {
         this.x = x;
         this.y = y;
     }
+
+    public Px(double[] data) {
+        this.data = data;
+    }
 }
 
 class RunMedianCut {
@@ -196,34 +175,5 @@ class RunMedianCut {
      * main function for testing
      * */
     public static void main(String[] args) {
-        // String inpImgFilePath = "./assets/dt.png";
-        // String outImgFilePath = "./assets/output.jpg"; // file extension misleading !
-        // MedianCut mc = new MedianCut(inpImgFilePath, outImgFilePath, 9);
-        String fileName = "as.jpg";
-        String filePath = "./assets/" + fileName;
-        byte[] imgBytes = null;
-
-        File f = new File(filePath);
-        try {
-            imgBytes = FileUtils.readFileToByteArray(f);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        MedianCut mc = new MedianCut();
-        // BufferedImage output = mc.getQuantizedImage(imgBytes, fileName, 4);
-        //
-        // BasicDisplayer disp = new BasicDisplayer();
-        // ArrayList<double[]> avrPxList = mc.getAvrP8List();
-        // for (int i = 0; i < avrPxList.size(); i++) {
-        //     double bgr[] = avrPxList.get(i);
-        //     int r = (int) bgr[2];
-        //     int g = (int) bgr[1];
-        //     int b = (int) bgr[0];
-        //     disp.addColor(b, g, r, i);
-        // }
-        //
-        // // BufferedImage img = BasicDisplayer.readImage(outImgFilePath);
-        // disp.addImage(output);
     }
 }
