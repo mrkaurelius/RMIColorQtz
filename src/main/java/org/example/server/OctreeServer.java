@@ -10,46 +10,46 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 /**
- *  Median Cut Server
+ * Median Cut Server
  */
 
-public class MCutServer implements QuantizationServer {
+public class OctreeServer implements QuantizationServer {
     long calcTimeDelta;
 
     // Run server
     public static void main(String[] args) throws RemoteException, AlreadyBoundException {
         // create and put server to registry
-        QuantizationServer mCutServer = new MCutServer();
-        Registry registry =  LocateRegistry.createRegistry(1099);
-        registry.bind("MedianCutServer",mCutServer);
+        QuantizationServer mCutServer = new OctreeServer();
+        Registry registry = LocateRegistry.createRegistry(1100);
+        registry.bind("OctreeServer", mCutServer);
         // if (System.getSecurityManager() == null)
         // System.setSecurityManager(new RMISecurityManager());
     }
 
-    public MCutServer() throws  RemoteException{
+    public OctreeServer() throws RemoteException {
         // TODO RMI hello world
         // 0 default port
         UnicastRemoteObject.exportObject(this, 0);
-        System.out.println("Median Cut Server Started");
+        System.out.println("Octree Server Started");
     }
 
     // run mc and return processed file
     @Override
     public byte[] Qtz(byte[] imgBytes, String fileName, int quantizationLevel) throws RemoteException {
-        System.out.println("Filename: " + fileName + ", " + " Qtz level: " + quantizationLevel);
-        long startTime = System.currentTimeMillis();
-
-        MedianCut mc = new MedianCut();
-        byte[] ret = mc.getQuantizedImage(imgBytes, fileName, quantizationLevel);
-
-        long endTime = System.currentTimeMillis();
-        calcTimeDelta = (endTime - startTime);
-        return ret;
+        return null;
     }
 
     @Override
     public ArrayList<int[]> QtzColor(byte[] imgBytes, String fileName, int quantizationLevel) throws RemoteException {
-        return null;
+        System.out.println("Filename: " + fileName + ", " + " Qtz level: " + quantizationLevel);
+
+        long startTime = System.currentTimeMillis();
+        Octree ot = new Octree();
+        ArrayList<int[]> ret = ot.getQuantizedColors(imgBytes,fileName,quantizationLevel);
+        long endTime = System.currentTimeMillis();
+
+        calcTimeDelta = (endTime - startTime);
+        return ret;
     }
 
     @Override

@@ -10,37 +10,90 @@ import org.opencv.imgcodecs.Imgcodecs;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 
 public class Octree {
 
     private Mat img;
-    private Mat output;
     private OctreeNode root;
 
     public Octree() {
         // load opencv
         OpenCV.loadShared();
-        OctreeNode root;
+        // OctreeNode root = new OctreeNode(0);
     }
 
-    public byte[] getQuantizedImage(byte[] imgBytes, String imgFileName, int K) {
-        // write file for opencv imread
+    // todo run from psvm
+    public ArrayList<int[]> getQuantizedColors(byte[] imgBytes, String imgFileName, int qLevel) {
         try (FileOutputStream fos = new FileOutputStream("./tmp/" + imgFileName)) {
             fos.write(imgBytes);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // System.out.println(imgFileName);
         this.img = Imgcodecs.imread("./tmp/" + imgFileName);
-        this.output = new Mat(img.rows(), img.cols(), img.type());
+        // System.out.println(img.cols());
 
-        // The principle of the octree algorithm is to sequentially read in the image.
-        // Every color is then stored in an octree of depth 8 (every leaf at depth 8 represents a distinct color)
-        // A limit of K (in this case K = 256) leaves is placed on the tree.
-        // reference counting: a way to know wheter an object has other users
+        root = new OctreeNode(0);
+        BuildTree();
 
-        this.root = new OctreeNode(0);
-        byte[] ret = null;
+        // TODO reduce with param
+        qLevel = 8 - qLevel;
+        for (int i = 0; i < qLevel; i++) {
+            OctreeNode.reduceTree(root);
+        }
+        // OctreeNode.dfs(oct.root);
+        // System.out.println("debug");
+        OctreeNode.dfs(root);
+        OctreeNode.buildPalette(root);
+        // oct.paintOutput();
+        // System.out.println(OctreeNode.palette.size());
+        //System.out.println();
+
+        ArrayList<int[]> ret = new ArrayList<int[]>(); // Create an ArrayList object
+        for (int i = 0; i < OctreeNode.palette.size(); i++) {
+            Px tmp = OctreeNode.palette.get(i);
+            int[] retArr = new int[3];
+            retArr[0] = (int) tmp.data[0];
+            retArr[1] = (int) tmp.data[1];
+            retArr[2] = (int) tmp.data[2];
+            ret.add(retArr);
+        }
+        OctreeNode.palette.clear();
         return ret;
+    }
+
+    public static void main(String[] args) {
+        Octree oct = new Octree();
+        BasicDisplayer bd = new BasicDisplayer();
+
+        // read file to byte array
+        String fileName = "as.jpg";
+        String filePath = "./assets/" + fileName;
+
+        byte[] imgBytes = null;
+        File inpFile = new File(filePath);
+        try {
+            imgBytes = FileUtils.readFileToByteArray(inpFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<int[]> palette = null; // Create an ArrayList object
+        palette = oct.getQuantizedColors(imgBytes, fileName, 1);
+
+        for (int i = 0; i < palette.size(); i++) {
+            int[] data = palette.get(i);
+            int b = data[0];
+            int g = data[1];
+            int r = data[2];
+            // System.out.println(b);
+            // System.out.println(g);
+            // System.out.println(r);
+            bd.addColor(b, g, r, 0);
+        }
+
     }
 
     // build trees returns octree root node
@@ -79,61 +132,6 @@ public class Octree {
     //         }
     //     }
     // }
-
-    public static void main(String[] args) {
-        String fileName = "as.jpg";
-        String filePath = "./assets/" + fileName;
-        BasicDisplayer disp = new BasicDisplayer();
-
-        byte[] imgBytes = null;
-
-        File inpFile = new File(filePath);
-        try {
-            imgBytes = FileUtils.readFileToByteArray(inpFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Octree oct = new Octree();
-        oct.img = Imgcodecs.imread(filePath);
-        oct.root = new OctreeNode(0);
-        oct.BuildTree();
-
-
-        OctreeNode.reduceTree(oct.root);
-        OctreeNode.reduceTree(oct.root);
-        OctreeNode.reduceTree(oct.root);
-        OctreeNode.reduceTree(oct.root);
-        OctreeNode.reduceTree(oct.root);
-        OctreeNode.reduceTree(oct.root);
-        // OctreeNode.reduceTree(oct.root);
-        // OctreeNode.reduceTree(oct.root);
-
-        // disp.addColor();
-        // OctreeNode.dfs(oct.root);
-        OctreeNode.dfs(oct.root);
-        System.out.println("debug");
-
-        OctreeNode.buildPalette(oct.root);
-        OctreeNode.dfs(oct.root);
-
-        // oct.paintOutput();
-        // imwrite output
-
-        System.out.println(OctreeNode.palette.size());
-
-        for (int i = 0; i < oct.root.palette.size(); i++) {
-            double[] data = oct.root.palette.get(i).data;
-            int b = (int) data[0];
-            int g = (int) data[1];
-            int r = (int) data[2];
-            // System.out.println(b);
-            // System.out.println(g);
-            // System.out.println(r);
-            disp.addColor(b,g,r,0);
-        }
-
-    }
 
 }
 

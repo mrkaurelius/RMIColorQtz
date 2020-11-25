@@ -97,10 +97,10 @@ class OctreeNode {
     public static void dfs(OctreeNode node) {
         for (int i = 0; i < 8; i++) {
             if (node != null) {
-                System.out.println(node.toString());
+                // System.out.println(node.toString());
                 // if references > 0 leaf node
                 if (node.references > 0) {
-                    //System.out.println(node.toString());
+                    System.out.println(node.toString());
                     return;
                 }
                 dfs(node.childs[i]);

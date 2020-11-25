@@ -25,7 +25,7 @@ public class BasicDisplayer {
         this.frame = new JFrame();
         this.frame.setLayout(new FlowLayout());
         this.frame.setSize(800, 600);
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.frame.setVisible(true);
     }
 
@@ -41,7 +41,7 @@ public class BasicDisplayer {
         label.setForeground(Color.white);
         label.setOpaque(true);
         label.setBackground(c);
-        label.setPreferredSize(new Dimension(10,10));
+        label.setPreferredSize(new Dimension(20,20));
         this.frame.add(label);
         this.frame.setVisible(true);
     }
