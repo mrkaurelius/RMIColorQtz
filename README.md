@@ -1,5 +1,7 @@
 # RMIColorQtz
 
+Color Quantization with RMI
+
 ### Dependencies
 - OpenCV Java JNI
 ```bash
